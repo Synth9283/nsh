@@ -5,15 +5,19 @@ import src/setup, src/getVars
 when defined(windows):
     const RunningOn = "windows"
     const homeDir = "USERPROFILE"
+    const dirSplit = r"\"
 when defined(linux):
     const RunningOn = "linux"
     const homeDir = "HOME"
+    const dirSplit = "/"
 when defined(mac):
     const RunningOn = "macos"
     const homeDir = "HOME"
+    const dirSplit = "/"
 when defined(other):
     const RunningOn = "other"
     const homeDir = "/"
+    const dirSplit = "/"
 
 # vars
 var line: string
@@ -22,7 +26,7 @@ var shellFormat: string
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"[{user}] --> ", line=line)
+        let result: bool = readLineFromStdin(&"[{user} {getCurrentDir().split(dirSplit)[^1]}] --> ", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
