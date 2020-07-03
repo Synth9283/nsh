@@ -1,7 +1,7 @@
 import rdstdin, strformat, strutils, osproc, os
 import src/setup, src/getVars
 
-# check the os
+# OS dependent vars
 when defined(windows):
     const RunningOn = "windows"
     const homeDir = "USERPROFILE"
