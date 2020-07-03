@@ -30,8 +30,7 @@ proc main() =
         of "cd":
             try: setCurrentDir(args[0])
             except IndexError:
-                try: setCurrentDir(getEnv(homeDir))
-                except OSError: echo getEnv(homeDir)
+                try: setCurrentDir(getEnv(homeDir)) except OSError: discard
             except OSError: echo "The directory does not exist!"
         else: echo execProcess(line)
         if not result: quit(0)
