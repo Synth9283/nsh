@@ -1,4 +1,4 @@
-import rdstdin, osproc, strformat
+import rdstdin, strformat, strutils, osproc, os
 import src/setup
 
 # check the os
@@ -19,8 +19,11 @@ var shellFormat: string
 proc main() =
     while true:
         let result: bool = readLineFromStdin(&"[{user}] --> ", line=line)
-        case line
+        let command: string = line.split(" ")[0]
+        let args: seq[string] = line.split(" ")[1..^1]
+        case command
         of "exit": quit(0)
+        of "cd": setCurrentDir(args[0])
         else: echo execProcess(line)
         if not result: quit(0)
 
