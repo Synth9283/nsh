@@ -1,4 +1,4 @@
-import rdstdin, os, strformat
+import rdstdin, osproc, strformat
 import src/setup
 
 # check the os
@@ -21,7 +21,7 @@ proc main() =
         let result: bool = readLineFromStdin(&"[{user}] --> ", line=line)
         case line
         of "exit": quit(0)
-        else: discard execShellCmd(line)
+        else: echo execProcess(line)
         if not result: quit(0)
 
 when isMainModule:
