@@ -1,4 +1,4 @@
-import rdstdin, strformat, strutils, terminal, osproc, os
+import rdstdin, strformat, strutils, osproc, os
 import src/setup, src/getVars
 
 # check the os
