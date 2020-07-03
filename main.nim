@@ -1,4 +1,4 @@
-import rdstdin, strformat, strutils, osproc, os
+import rdstdin, strformat, strutils, terminal, osproc, os
 import src/setup, src/getVars
 
 # check the os
@@ -35,8 +35,8 @@ proc main() =
             try: setCurrentDir(args[0])
             except IndexError:
                 try: setCurrentDir(getEnv(homeDir)) except OSError: discard
-            except OSError: echo "The directory does not exist!"
-        else: echo execProcess(line)
+            except OSError: stdout.write("The directory does not exist!")
+        else: stdout.write(execProcess(line))
         if not result: quit(0)
 
 when isMainModule:
