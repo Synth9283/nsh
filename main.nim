@@ -22,8 +22,8 @@ var shellFormat: string
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"[{user} {getCurrentDir().split(dirSplit)[^1]}{gitBranch()}] ❯ ", line=line)
-        let command: string = line.split(" ")[0].strip()
+        let result: bool = readLineFromStdin(&"[{user} {getCurrentDir().split(dirSplit)[^1]}{gitBranch()}] --> ", line=line)
+        let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
         of "exit": quit(0)
