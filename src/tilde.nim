@@ -1,6 +1,6 @@
 import strutils, os
 proc tilde*(path: string): string =
-  var npath = path & "/"
+  var npath = path # & "/"
   let home = getHomeDir()
   if npath.startsWith(home):
     result = "~/" & path.split(home)[1]
