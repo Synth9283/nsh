@@ -26,13 +26,13 @@ var
     shellFormat: string
 
 # ansi vars
-const
+let
     black: string = "\x1b[30m"
     red: string = "\x1b[31m"
     green: string = "\x1b[32m"
     yellow: string = "\x1b[33m"
     blue: string = "\x1b[34m"
-    megenta: string = "\x1b[35m"
+    magenta: string = "\x1b[35m"
     cyan: string = "\x1b[36m"
     white: string = "\x1b[37m"
     reset: string = "\x1b[0m"
@@ -40,7 +40,7 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"[{cyan}{user} {blue}{getCurrentDir().split(dirSplit)[^1]}{green}{gitBranch()}{reset}] {megenta}--> {reset}", line=line)
+        let result: bool = readLineFromStdin(&"[{cyan}{user} {blue}{getCurrentDir().split(dirSplit)[^1]}{green}{gitBranch()}{reset}] {magenta}--> {reset}", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
