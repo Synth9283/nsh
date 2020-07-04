@@ -1,5 +1,5 @@
 import rdstdin, strformat, strutils, osproc, os
-import src/setup, src/getVars, src/git, src/tilde
+import src/setup, src/getVars, src/gitBranch, src/homeDir
 
 # OS dependent variables for windows, macOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -40,7 +40,7 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"{blue}{tilde(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}", line=line)
+        let result: bool = readLineFromStdin(&"{blue}{homeDir(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
@@ -51,17 +51,12 @@ proc main() =
                 try: setCurrentDir(getHomeDir()) except OSError: discard
             except OSError: echo("The directory specified does not exist. See `help cd`.")
         of "export":
-            if args.len == 0:
-                echo("Nothing was provided to export. See `help export`")
-            var stuff = args[0].split("=")
-            if stuff[1].startsWith("'") and stuff[1].endsWith("'"):
-                stuff[1].removePrefix("'"); stuff[1].removeSuffix("'")
-            elif stuff[1].startsWith("\"") and stuff[1].endsWith("\""):
-                stuff[1].removePrefix("\""); stuff[1].removeSuffix("\"")
-            try:
-                putEnv(stuff[0], stuff[1])
-            except:
-                echo("There was an error setting the environment variable, please check `help export`")
+            if args == @[]: echo("Nothing was provided to export. See `help export`")
+            var envVar: seq[string] = args[0].split("=")
+            var envVarVal: string = envVar[1]
+            if envVarVal.startsWith("'") and envVarVal.endsWith("'"): envVarVal.removePrefix("'"); envVarVal.removeSuffix("'")
+            elif envVarVal.startsWith("\"") and envVarVal.endsWith("\""): envVarVal.removePrefix("\""); envVarVal.removeSuffix("\"")
+            try: putEnv(envVar[0], envVarVal) except: echo("There was an error setting the environment variable, please check `help export`")
         else: stdout.write(execProcess(line))
         if not result: quit(0)
 
