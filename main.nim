@@ -1,7 +1,7 @@
 import rdstdin, strformat, strutils, osproc, os
 import src/setup, src/getVars, src/gitBranch, src/homeDir
 
-# OS dependent variables for windows, macOS, Linux, and other operating systems (assumed to be UNIX comliant)
+# OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
     const
         RunningOn: string = "windows"
