@@ -26,7 +26,7 @@ var
     shellFormat: string
 
 # ansi vars
-let
+const
     black: string = "\x1b[30m"
     red: string = "\x1b[31m"
     green: string = "\x1b[32m"
