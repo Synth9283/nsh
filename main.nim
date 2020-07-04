@@ -1,7 +1,7 @@
 import rdstdin, strformat, strutils, osproc, os
-import src/setup, src/getVars, src/gitBranch
+import src/setup, src/getVars, src/git
 
-# OS dependent vars
+# OS dependent variables for windows, macOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
     const
         RunningOn: string = "windows"
@@ -14,10 +14,10 @@ when defined(mac):
     const
         RunningOn: string = "macos"
         dirSplit: string = "/"
-when defined(other):
+when defined(other): 
     const
         RunningOn: string = "other"
-        dirSplit: string = "/"
+        dirSplit: string = "/" 
 
 # shell vars
 var
@@ -40,7 +40,7 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"[{cyan}{user} {blue}{getCurrentDir().split(dirSplit)[^1]}{green}{gitBranch()}{reset}] {magenta}--> {reset}", line=line)
+        let result: bool = readLineFromStdin(&"{blue}{getCurrentDir()}{reset} [{green}{gitBranch().strip()}{gitStatus()}{reset}] {magenta}--> {reset}", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
@@ -49,9 +49,19 @@ proc main() =
             try: setCurrentDir(args[0])
             except IndexError:
                 try: setCurrentDir(getHomeDir()) except OSError: discard
-            except OSError: stdout.write("\nThe directory does not exist!")
-        # of "clear":
-        #     echo clear
+            except OSError: echo("The directory specified does not exist. See `help cd`.")
+        of "export":
+            if args.len == 0:
+                echo("Nothing was provided to export. See `help export`")
+            var stuff = args[0].split("=")
+            if stuff[1].startsWith("'") and stuff[1].endsWith("'"):
+                stuff[1].removePrefix("'"); stuff[1].removeSuffix("'")
+            elif stuff[1].startsWith("\"") and stuff[1].endsWith("\""):
+                stuff[1].removePrefix("\""); stuff[1].removeSuffix("\"")
+            try:
+                putEnv(stuff[0], stuff[1])
+            except:
+                echo("There was an error setting the environment variable, please check `help export`")
         else: stdout.write(execProcess(line))
         if not result: quit(0)
 
