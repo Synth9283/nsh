@@ -40,7 +40,7 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"[{blue}{user} {green}{getCurrentDir().split(dirSplit)[^1]}{cyan}{gitBranch()}{reset}] {megenta}--> {reset}", line=line)
+        let result: bool = readLineFromStdin(&"[{cyan}{user} {blue}{getCurrentDir().split(dirSplit)[^1]}{green}{gitBranch()}{reset}] {megenta}--> {reset}", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
