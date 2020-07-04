@@ -1,5 +1,5 @@
 import rdstdin, strformat, strutils, osproc, os
-import src/setup, src/getVars, src/git
+import src/setup, src/getVars, src/git, src/tilde
 
 # OS dependent variables for windows, macOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -40,7 +40,7 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"{blue}{getCurrentDir()}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}", line=line)
+        let result: bool = readLineFromStdin(&"{blue}{tilde(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}", line=line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         case command
