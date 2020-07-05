@@ -1,5 +1,5 @@
 import strformat, strutils, osproc, os
-import src/setup, src/getVars, src/gitBranch, src/homeDir
+import src/setup, src/getVars, src/gitBranch, src/homeDir, src/colorsAnsi
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -25,22 +25,10 @@ var
     user: string
     shellFormat: string
 
-# ansi vars
-const
-    black: string = "\x1b[30m"
-    red: string = "\x1b[31m"
-    green: string = "\x1b[32m"
-    yellow: string = "\x1b[33m"
-    blue: string = "\x1b[34m"
-    magenta: string = "\x1b[35m"
-    cyan: string = "\x1b[36m"
-    white: string = "\x1b[37m"
-    reset: string = "\x1b[0m"
-    clear: string = "\x1b[2J"
 
 proc main() =
     while true:
-        stdout.write(&"{blue}{homeDir(getCurrentDir())} {green}{gitBranch().strip()}{magenta} > {reset}")
+        stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} > {resetc}")
         stdout.flushFile()
         let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
