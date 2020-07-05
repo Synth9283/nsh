@@ -40,7 +40,8 @@ const
 
 proc main() =
     while true:
-        let result: bool = readLineFromStdin(&"{blue}{homeDir(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}", line=line)
+        stdout.write(&"{blue}{homeDir(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}")
+        let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
         if not line.endsWith("^C"):
