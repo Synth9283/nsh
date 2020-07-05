@@ -61,7 +61,7 @@ proc main() =
                     if envVarVal.startsWith("'") and envVarVal.endsWith("'"): envVarVal.removePrefix("'"); envVarVal.removeSuffix("'")
                     elif envVarVal.startsWith("\"") and envVarVal.endsWith("\""): envVarVal.removePrefix("\""); envVarVal.removeSuffix("\"")
                     try: putEnv(envVar[0], envVarVal) except: echo("There was an error setting the environment variable, please check `help export`")
-            else: stdout.write(execProcess(line))
+            else: stdout.write(execProcess(line)); stdout.flushFile()
         elif not result: quit(0)
 
 when isMainModule:
