@@ -27,7 +27,10 @@ var
 
 proc main() =
     while true:
-        stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} > {resetc}")
+        var promptchar: string
+        if existsEnv("PROMPTCHAR"): promptchar = getEnv("PROMPTCHAR")
+        else: promptchar = ">"
+        stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} {promptchar} {resetc}")
         stdout.flushFile()
         let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
