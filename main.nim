@@ -40,7 +40,8 @@ const
 
 proc main() =
     while true:
-        stdout.write(&"{blue}{homeDir(getCurrentDir())}{reset} [{green}{gitBranch().strip()}{reset}] {magenta}> {reset}")
+        stdout.write(&"{blue}{homeDir(getCurrentDir())} {green}{gitBranch().strip()}{magenta} > {reset}")
+        stdout.flushFile()
         let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
