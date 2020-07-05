@@ -26,7 +26,7 @@ var
     shellFormat: string
 
 proc main() =
-    var cnsh = getHomeDir() & ".learconfig.nsh"
+    var cnsh = getHomeDir() & ".config.nsh"
     if fileExists(cnsh): 
         for line in readFile(cnsh).split("\n"):
             let command: string = line.split(" ")[0]
