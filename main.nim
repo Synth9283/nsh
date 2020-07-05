@@ -1,4 +1,4 @@
-import rdstdin, strformat, strutils, osproc, os
+import strformat, strutils, osproc, os
 import src/setup, src/getVars, src/gitBranch, src/homeDir
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
