@@ -25,7 +25,6 @@ var
     user: string
     shellFormat: string
 
-
 proc main() =
     while true:
         stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} > {resetc}")
