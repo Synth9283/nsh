@@ -15,4 +15,9 @@ proc runLine*(command:string, line:string, args:seq[string]):string =
             if envVarVal.startsWith("'") and envVarVal.endsWith("'"): envVarVal.removePrefix("'"); envVarVal.removeSuffix("'")
             elif envVarVal.startsWith("\"") and envVarVal.endsWith("\""): envVarVal.removePrefix("\""); envVarVal.removeSuffix("\"")
             try: putEnv(envVar[0], envVarVal) except: return "There was an error setting the environment variable, please check `help export`"
+    of ".", "source":
+        for script in args:
+            for line in readFile(script).split("\n"):
+                let command: string = line.split(" ")[0]
+                stdout.write(runLine(command, line, args))
     else: stdout.write(execProcess(line)); stdout.flushFile()
