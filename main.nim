@@ -26,12 +26,12 @@ var
     shellFormat: string
 
 proc main() =
-    var cnsh = getHomeDir() & ".config.nsh"
+    var cnsh = getHomeDir() & ".nshrc"
     if fileExists(cnsh): 
         for line in readFile(cnsh).split("\n"):
             let command: string = line.split(" ")[0]
             let args: seq[string] = getVars(line.split(" ")[1..^1])
-            stdout.write(runLine(command, line, args))
+            runLine(command, line, args)
     while true:
         var promptchar: string
         if existsEnv("PROMPTCHAR"): promptchar = getEnv("PROMPTCHAR")
@@ -41,7 +41,7 @@ proc main() =
         let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getVars(line.split(" ")[1..^1])
-        if not line.endsWith("^C"): stdout.write(runLine(command, line, args))
+        if not line.endsWith("^C"): runLine(command, line, args)
         elif not result: quit(0)
 
 when isMainModule:

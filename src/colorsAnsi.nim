@@ -10,3 +10,5 @@ const
     white*: string = "\x1b[37m"
     resetc*: string = "\x1b[0m"
     clear*: string = "\x1b[2J"
+
+proc err*(s:string):string = return red & s & resetc
