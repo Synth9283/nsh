@@ -3,7 +3,9 @@ proc runLine*(command:string, line:string, args:seq[string]) =
     case command
     of "exit": quit(0)
     of "cd":
-        try: setCurrentDir(args[0])
+        try:
+            if args[0] == "~": setCurrentDir(getHomeDir())
+            else: setCurrentDir(args[0])
         except IndexError:
             try: setCurrentDir(getHomeDir())
             except OSError: discard
