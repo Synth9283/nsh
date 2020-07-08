@@ -26,7 +26,7 @@ var
     shellFormat: string
 
 proc main() =
-    var cnsh = getHomeDir() & ".nshrc"
+    let cnsh = getHomeDir() & ".nshrc"
     if fileExists(cnsh): 
         for line in readFile(cnsh).split("\n"):
             let command: string = line.split(" ")[0]
