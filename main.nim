@@ -1,5 +1,5 @@
-import strformat, strutils, osproc, os
-import src/setup, src/getVars, src/gitBranch, src/homeDir, src/colorsAnsi, src/runLine
+import strformat, strutils, os
+import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -30,7 +30,7 @@ proc main() =
     if fileExists(cnsh): 
         for line in readFile(cnsh).split("\n"):
             let command: string = line.split(" ")[0]
-            let args: seq[string] = getVars(line.split(" ")[1..^1])
+            let args: seq[string] = getArgs(line.split(" ")[1..^1])
             runLine(command, line, args)
     while true:
         var promptchar: string
@@ -40,7 +40,7 @@ proc main() =
         stdout.flushFile()
         let result: bool = stdin.readLine(line)
         let command: string = line.split(" ")[0]
-        let args: seq[string] = getVars(line.split(" ")[1..^1])
+        let args: seq[string] = getArgs(line.split(" ")[1..^1])
         if not line.endsWith("^C"): runLine(command, line, args)
         elif not result: quit(0)
 
