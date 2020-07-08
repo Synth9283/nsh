@@ -5,6 +5,7 @@ The official Narcoleptic Shell repository
 - [ ] custom script support
 - [ ] pre-built binaries
 - [ ] support for arrow keys
+- [ ] easy installation scripts
 ## Features
 - Cross platform
 - Easily customizable
