@@ -32,4 +32,6 @@ proc runLine*(command: string, line: string, args: seq[string]) =
        var hp = help(eargs.join(" "))
        if hp == "": echo ("No help page found for " & eargs.join(" ") & ".").err
        else: echo hp
-    else: stdout.write(execProcess(line)); stdout.flushFile()
+    else:
+        if line.startsWith("#"): discard # ignore immediately to avoid overhead of passing comments to sh/cmd to eval
+        else: stdout.write(execProcess(line)); stdout.flushFile()

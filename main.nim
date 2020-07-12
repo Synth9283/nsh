@@ -1,5 +1,5 @@
 import strformat, strutils, os
-import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine
+import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine, src/customReadLine
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -34,11 +34,11 @@ proc main() =
             runLine(command, line, args)
     while true:
         var promptchar: string
-        if existsEnv("PROMPTCHAR"): promptchar = getEnv("PROMPTCHAR")
+        if existsEnv("PROMPfTCHAR"): promptchar = getEnv("PROMPTCHAR")
         else: promptchar = ">"
         stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} {promptchar} {resetc}")
         stdout.flushFile()
-        let result: bool = stdin.readLine(line)
+        let result: bool = stdin.customReadLine(line)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getArgs(line.split(" ")[1..^1])
         if not line.endsWith("^C"): runLine(command, line, args)
