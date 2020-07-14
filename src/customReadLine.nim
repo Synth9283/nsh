@@ -48,8 +48,7 @@ proc customReadLine*(f: File, line: var TaintedString): bool {.tags: [ReadIOEffe
     while true:
       # fixes #9634; this pattern may need to be abstracted as a template if reused;
       # likely other io procs need this for correctness.
-      var fg = $c_fgets(addr line.string[pos], sp.cint, f)
-      # fg = fg.replace("^[[A","").replace("^[[D","").replace("^[[C","").replace("^[[B","")
+      discard c_fgets(addr line.string[pos], sp.cint, f)
       when not defined(NimScript):
         if errno == EINTR:
           errno = 0
@@ -72,17 +71,15 @@ proc customReadLine*(f: File, line: var TaintedString): bool {.tags: [ReadIOEffe
         if last < pos + sp - 1 and line.string[last+1] != '\0': last.dec
       line.string.setLen(last)
       return last > 0 
-    else:
-      # fgets will have inserted a null byte at the end of the string.
-      sp.dec
+    else: sp.dec
     # No \l found: Increase buffer and read more
-    inc pos, sp
-    sp = 128 # read in 128 bytes at a time
+    inc(pos, sp)
+    sp = 128 # read in 128 bytes at one time
     line.string.setLen(pos+sp)
 
 proc customReadLine*(f: File): TaintedString {.tags: [ReadIOEffect], benign.} =
   ## reads a line of text from the file `f`. May throw an IO exception.
   ## A line of text may be delimited by ``LF`` or ``CRLF``. The newline
   ## character(s) are not part of the returned string.
-  result = TaintedString(newStringOfCap(80))
+  result = TaintedString(80.newStringOfCap)
   if not customReadLine(f, result): raiseEOF()
