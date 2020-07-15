@@ -1,5 +1,5 @@
 import strformat, strutils, os
-import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine, src/customReadLine, linenoise
+import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine, linenoise
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -24,13 +24,18 @@ var
     user: string
     shellFormat: string
 
+let cnsh = getHomeDir() & ".nshrc"
+let history = getHomeDir() & ".nsh_history"
+
 proc main() =
-    let cnsh = getHomeDir() & ".nshrc"
+
     if fileExists(cnsh): 
         for line in readFile(cnsh).split("\n"):
             let command: string = line.split(" ")[0]
             let args: seq[string] = getArgs(line.split(" ")[1..^1])
             runLine(command, line, args)
+    if fileExists(history):
+        historyAdd(history.cstring)
     while true:
         var promptchar: string
         if existsEnv("PROMPTCHAR"): promptchar = getEnv("PROMPTCHAR")
@@ -45,3 +50,4 @@ proc main() =
 when isMainModule:
     setup(RunningOn, user, shellFormat)
     main()
+    discard historySave(history)
