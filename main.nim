@@ -1,5 +1,5 @@
 import strformat, strutils, os
-import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine, src/customReadLine
+import src/setup, src/getArgs, src/colorsAnsi, src/homeDir, src/gitBranch, src/runLine, src/customReadLine, linenoise
 
 # OS dependent variables for Windows, MacOS, Linux, and other operating systems (assumed to be UNIX comliant)
 when defined(windows):
@@ -21,7 +21,6 @@ when defined(other):
 
 # shell vars
 var
-    line: string
     user: string
     shellFormat: string
 
@@ -34,15 +33,14 @@ proc main() =
             runLine(command, line, args)
     while true:
         var promptchar: string
-        if existsEnv("PROMPfTCHAR"): promptchar = getEnv("PROMPTCHAR")
+        if existsEnv("PROMPTCHAR"): promptchar = getEnv("PROMPTCHAR")
         else: promptchar = ">"
-        stdout.write(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} {promptchar} {resetc}")
-        stdout.flushFile()
-        let result: bool = stdin.customReadLine(line)
+        let linec = linenoise.readLine(&"{blue}{homeDir(getCurrentDir())}{green}{gitBranch()}{magenta} {promptchar} {resetc}")
+        let line = $linec
+        historyAdd(linec)
         let command: string = line.split(" ")[0]
         let args: seq[string] = getArgs(line.split(" ")[1..^1])
-        if not line.endsWith("^C"): runLine(command, line, args)
-        elif not result: quit(0)
+        runLine(command, line, args)
 
 when isMainModule:
     setup(RunningOn, user, shellFormat)
